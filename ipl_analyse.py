@@ -9,7 +9,7 @@ import seaborn as sns
 st.set_page_config(page_title="IPL Winner Analysis", layout="wide")
 
 # Title
-st.title("🏏 IPL Winner Analysis Dashboard")
+st.title("IPL Winner Analysis Dashboard")
 st.markdown("Welcome to the ultimate breakdown of IPL match results! Dive into toss decisions, team performances, and venue dominance.")
 
 # Load Data
@@ -21,11 +21,11 @@ st.sidebar.header("Filter the Data")
 selected_season = st.sidebar.selectbox("Select a Season", sorted(data['season'].unique(), reverse=True))
 filtered_data = data[data["season"] == selected_season]
 
-st.subheader(f"📅 Matches from IPL {selected_season}")
+st.subheader(f"Matches from IPL {selected_season}")
 st.dataframe(filtered_data.head())
 
 # Data Summary
-st.subheader("🔍 Data Summary")
+st.subheader(" Data Summary")
 st.write(f"Total Matches in {selected_season}: {filtered_data.shape[0]}")
 st.write("Number of Matches each Team Played:")
 team_matches = pd.concat([filtered_data['team1'], filtered_data['team2']]).value_counts()
@@ -33,7 +33,7 @@ st.bar_chart(team_matches)
 
 
 # Toss win vs Match win (Styled + Visual)
-st.subheader("🧠 Does Winning the Toss Help Win the Match?")
+st.subheader("Does Winning the Toss Help Win the Match?")
 
 # Calculate stats
 toss_stats = filtered_data["toss_winner"] == filtered_data["winner"]
@@ -47,18 +47,18 @@ ax.pie(toss_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=colo
 ax.set_title("Impact of Toss Win on Match Outcome", fontsize=14)
 st.pyplot(fig)
 
-st.write("### 📊 Breakdown:")
+st.write("###  Breakdown:")
 st.dataframe(pd.DataFrame({'Result': labels, 'Count': toss_counts.values}))
 
 
 # Lucky Venue
-st.subheader("🍀 Luckiest Venue-Team Combo")
+st.subheader(" Luckiest Venue-Team Combo")
 venue_win = filtered_data.groupby(["venue", "winner"]).size().unstack().fillna(0)
 lucky_venue = venue_win.stack().idxmax()
 st.write(f"The luckiest venue-team combo in {selected_season} was: **{lucky_venue[1]} at {lucky_venue[0]}**")
 
 # Top 10 Venue-Team combos
-st.subheader("🏟️ Top 10 Most Dominant Team-Venue Combos")
+st.subheader("Top 10 Most Dominant Team-Venue Combos")
 top10wins_venue = venue_win.stack().sort_values(ascending=False).head(10)
 
 fig1, ax1 = plt.subplots(figsize=(12,6))
@@ -71,7 +71,7 @@ ax1.grid(axis='y', linestyle='--', alpha=0.7)
 st.pyplot(fig1)
 
 # Toss Decision vs Venue
-st.subheader("🎯 Toss Decision Impact by Venue")
+st.subheader(" Toss Decision Impact by Venue")
 venue_toss_winner = filtered_data.groupby(["venue", "toss_decision", "winner"]).size().reset_index(name='wins')
 
 fig2, ax2 = plt.subplots(figsize=(14,8))
@@ -85,7 +85,7 @@ ax2.grid(axis='y', linestyle='--', alpha=0.5)
 st.pyplot(fig2)
 
 # Top winner per season
-st.subheader("🏆 Top Winner of the Season")
+st.subheader(" Top Winner of the Season")
 top_per_season = data.groupby(['season', 'winner']).size().reset_index(name='wins')
 top_winner = top_per_season.loc[top_per_season.groupby('season')['wins'].idxmax()]
 st.dataframe(top_winner[top_winner['season'] == selected_season])
